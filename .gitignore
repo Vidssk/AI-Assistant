@@ -1,0 +1,62 @@
+
+# =========================
+# OS / System files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Python backend
+# =========================
+backend/.venv/
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (IMPORTANT)
+backend/.env
+.env
+backend/venv311/
+backend/.venv/
+venv311/
+# SQLite database (optional: depends if you want to track it in git)
+backend/database/*.db
+*.db
+
+# Logs
+*.log
+
+# Cache folders
+.cache
+backend/.cache/
+
+# =========================
+# Node / Next.js frontend
+# =========================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# IDE / Editors
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Spotify / API secrets (extra safety)
+# =========================
+# backend/services/spotify/*.json
+# backend/**/client_secret*.json
+
+# =========================
+# Optional: build artifacts
+# =========================
+# dist/
+# build/
