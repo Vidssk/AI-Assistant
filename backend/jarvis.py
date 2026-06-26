@@ -44,7 +44,7 @@ class Jarvis:
             print("\n🔥 JARVIS WAKING UP\n")
 
             self.active = True
-            self.run(voice_mode=True)
+            self.run(voice_mode=False)
 
     def run(self, voice_mode=False):
 
@@ -78,22 +78,26 @@ class Jarvis:
 
             if handler:
                 try:
-                    self.state_manager.update(event=intent)
+                    self.state_manager.update(status="active", agent=intent, event=intent)
                     response = handler(args)
 
                     if response:
                         print(response)
-                        speak(response, 
+                        speak(
+                            response,
                             f"voice_samples/{self.name.title()}/{self.name}.wav",
-                            f"voice_samples/{self.name.title()}/output.wav")
+                            f"voice_samples/{self.name.title()}/output.wav",
+                            output_device=self.output_device.get("index"),
+                        )
 
                 except Exception as e:
                     print(f"Error executing {intent}: {e}")
 
             else:
                 print(f"Unknown intent: {intent}")
-            self.state_manager.update(status="idle",agent=None,event=None)
+            self.state_manager.update(status="idle", agent=None, event=None)
             self.active = False
+            print(f"{self.name} is idle.")
 
 
 # Example usage

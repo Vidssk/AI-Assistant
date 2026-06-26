@@ -1,9 +1,8 @@
 from db.state_db import update_state, get_state
 from db.events_db import add_event, get_events
-# managers/state_manager.py
-from db.state_db import update_state, get_state
-from db.events_db import add_event, get_events
 import asyncio
+
+_UNSET = object()
 
 class StateManager:
     def __init__(self, event_bus):
@@ -12,19 +11,20 @@ class StateManager:
         self.clients = set()
         self.loop = None   # will store FastAPI loop
         self.event_bus = event_bus
-    def update(self, status=None, agent=None, event=None):
+    def update(self, status=None, agent=_UNSET, event=None):
         if status is not None:
             self.status = status
             update_state(status=status)
 
-        if agent is not None:
+        if agent is not _UNSET:
             self.agent = agent
             update_state(agent=agent)
 
         if event:
             add_event(event)
 
-        self.event_bus.emit(self.get_payload())
+        payload = self.get_payload()
+        self.event_bus.emit(payload)
 
         # # SAFE async bridge
         # if self.loop:

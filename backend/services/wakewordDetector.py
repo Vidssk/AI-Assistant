@@ -102,9 +102,7 @@ class WakeWordDetector:
         self.paused = False
 
     def stop(self):
-
         self.active = False
-
     def start(self):
 
         print(
@@ -132,7 +130,6 @@ class WakeWordDetector:
 
             finally:
                 print("Leaving InputStream")
-
         # with sd.InputStream(
         #     device=self.device,
         #     samplerate=self.sample_rate,

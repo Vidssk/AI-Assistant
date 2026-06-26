@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 
 DB_PATH = "db/jarvis.db"
+_UNSET = object()
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
@@ -23,7 +24,7 @@ def init_db():
     conn.close()
 
 
-def update_state(status=None, agent=None):
+def update_state(status=None, agent=_UNSET):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
@@ -31,7 +32,7 @@ def update_state(status=None, agent=None):
         c.execute("UPDATE state SET status=?, updated_at=? WHERE id=1",
                   (status, datetime.utcnow().isoformat()))
 
-    if agent is not None:
+    if agent is not _UNSET:
         c.execute("UPDATE state SET agent=?, updated_at=? WHERE id=1",
                   (agent, datetime.utcnow().isoformat()))
 
