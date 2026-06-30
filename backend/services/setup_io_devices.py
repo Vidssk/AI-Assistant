@@ -1,4 +1,34 @@
 import sounddevice as sd
+import json
+import time
+from pathlib import Path
+
+# #region agent log
+def _dbg_io(hypothesis_id, location, message, data=None):
+    try:
+        log_path = Path(__file__).resolve().parents[2] / "debug-8c9fdb.log"
+        payload = {"sessionId": "8c9fdb", "hypothesisId": hypothesis_id, "location": location, "message": message, "data": data or {}, "timestamp": int(time.time() * 1000)}
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload) + "\n")
+    except Exception:
+        pass
+# #endregion
+
+def resolve_input_device_index(mic_index=None):
+    if mic_index is not None:
+        return mic_index
+
+    default = sd.default.device
+    if isinstance(default, (list, tuple)) and default[0] is not None:
+        return default[0]
+    if isinstance(default, int):
+        return default
+
+    for i, device in enumerate(sd.query_devices()):
+        if device["max_input_channels"] > 0:
+            return i
+
+    return None
 
 def setupInputDevice():
     preferred_devices = [
@@ -25,8 +55,22 @@ def setupInputDevice():
             if preferred in device_name:
                 input_device["index"] = i
                 input_device["name"] = device_name
+                # #region agent log
+                _dbg_io("A", "setup_io_devices.py:setupInputDevice", "matched preferred input device", input_device)
+                # #endregion
                 return input_device
 
+    fallback_index = resolve_input_device_index()
+    if fallback_index is not None:
+        input_device["index"] = fallback_index
+        input_device["name"] = sd.query_devices(fallback_index)["name"]
+        # #region agent log
+        _dbg_io("A", "setup_io_devices.py:setupInputDevice", "using fallback input device", input_device)
+        # #endregion
+
+    # #region agent log
+    _dbg_io("A", "setup_io_devices.py:setupInputDevice", "no input device resolved", input_device)
+    # #endregion
     return input_device
 
 def setupOutputDevice():

@@ -38,13 +38,13 @@ class Jarvis:
 
     def perform_task(self, task):
         return f"Performing task: {task}"
-    def wake(self):
+    def wake(self, Vmode=True):
         if not self.active:
             self.state_manager.update(status="active")
             print("\n🔥 JARVIS WAKING UP\n")
 
             self.active = True
-            self.run(voice_mode=False)
+            self.run(voice_mode=Vmode)
 
     def run(self, voice_mode=False):
 
@@ -56,7 +56,13 @@ class Jarvis:
         while self.active:
 
             if voice_mode:
-                audio, sr = record_audio_vad(mic_index=self.input_device["index"])
+                try:
+                    audio, sr = record_audio_vad(mic_index=self.input_device["index"])
+                except RuntimeError as e:
+                    print(f"Voice input failed: {e}")
+                    self.state_manager.update(status="idle", agent=None, event=None)
+                    self.active = False
+                    break
                 user_input = self.speech_to_text_fn(audio, sr)
                 print(f"You said: {user_input}")
             else:

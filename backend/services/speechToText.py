@@ -1,6 +1,20 @@
 import numpy as np
 import sounddevice as sd
 import time
+import json
+from pathlib import Path
+from services.setup_io_devices import resolve_input_device_index
+
+# #region agent log
+def _dbg_stt(hypothesis_id, location, message, data=None):
+    try:
+        log_path = Path(__file__).resolve().parents[2] / "debug-8c9fdb.log"
+        payload = {"sessionId": "8c9fdb", "hypothesisId": hypothesis_id, "location": location, "message": message, "data": data or {}, "timestamp": int(time.time() * 1000)}
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload) + "\n")
+    except Exception:
+        pass
+# #endregion
 
 
 # transcribe audio to text using the Whisper model
@@ -22,14 +36,12 @@ def record_audio_vad(
     chunk_duration=0.3,   # how often we check audio
     mic_index=None
 ):
-    if mic_index ==None:
-        print("input Mic index not provided")
-        return
-    
-
-    sd.default.device = mic_index
-
-    print("Listening... (start speaking)")
+    mic_index = resolve_input_device_index(mic_index)
+    # #region agent log
+    _dbg_stt("B", "speechToText.py:record_audio_vad", "resolved mic index", {"mic_index": mic_index})
+    # #endregion
+    if mic_index is None:
+        raise RuntimeError("No input microphone device available")
 
     audio_buffer = []
     silence_start = None
@@ -50,6 +62,7 @@ def record_audio_vad(
             silence_start = None
 
     with sd.InputStream(
+        device=mic_index,
         samplerate=sample_rate,
         channels=1,
         callback=callback,
