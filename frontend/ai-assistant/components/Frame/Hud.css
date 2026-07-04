@@ -1,0 +1,101 @@
+.hud {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.hud-grid {
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+
+    /* Corner sizes */
+    grid-template-columns: 110px 1fr 110px;
+    grid-template-rows: 80px 1fr 80px;
+
+    width: 100%;
+    height: 100%;
+}
+
+.hud-grid > div {
+    width: 100%;
+    height: 100%;
+}
+
+/* ---------- Corners ---------- */
+
+.tl {
+    background: url("/ui/HUD_Frames/corner_tl.svg") no-repeat top left;
+    background-size: 110px auto;
+    /* background-color: pink; */
+}
+
+.tr {
+    background: url("/ui/HUD_Frames/corner_tr.svg") no-repeat top right;
+    background-size: 110px auto;
+}
+
+.bl {
+    background: url("/ui/HUD_Frames/corner_bl.svg") no-repeat bottom left;
+    background-size: 110px auto;
+}
+
+.br {
+    background: url("/ui/HUD_Frames/corner_br.svg") no-repeat bottom right;
+    background-size: 110px auto;
+}
+
+/* ---------- Top ---------- */
+
+.top {
+    background: url("/ui/HUD_Frames/top.svg") repeat-x top center;
+    background-size: auto 3px;
+}
+
+/* ---------- Bottom ---------- */
+
+.bottom {
+    background: url("/ui/HUD_Frames/bottom.svg") repeat-x bottom center;
+    background-size: auto 4.25px;
+}
+
+/* ---------- Left ---------- */
+
+.left {
+    background: url("/ui/HUD_Frames/left.svg") repeat-y left center;
+    background-size: 4px auto;
+}
+
+/* ---------- Right ---------- */
+
+.right {
+    background: url("/ui/HUD_Frames/right.svg") repeat-y right center;
+    background-size: 7px auto;
+    /* background-color: red */
+}
+
+/* ---------- Center ---------- */
+
+.center {
+    width: 100%;
+    height: 100%;
+}
+
+/* ---------- Content ---------- */
+
+/* .hud-content {
+    position: absolute;
+    inset: 80px 110px;
+    z-index: 10;
+} */
+ .hud-content {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+/* Every direct child can be freely positioned */
+.hud-content > * {
+    position: absolute;
+}
