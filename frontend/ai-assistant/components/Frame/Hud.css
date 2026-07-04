@@ -2,6 +2,29 @@
     position: relative;
     width: 100%;
     height: 100%;
+    container-type: size;
+    --hud-corner-w: 110px;
+    --hud-corner-h: 80px;
+}
+
+@container (max-width: 500px) {
+    .hud {
+        --hud-corner-w: 60px;
+        --hud-corner-h: 45px;
+    }
+}
+
+@container (max-width: 300px) {
+    .hud {
+        --hud-corner-w: 36px;
+        --hud-corner-h: 28px;
+    }
+}
+
+@container (max-height: 200px) {
+    .hud {
+        --hud-corner-h: 28px;
+    }
 }
 
 .hud-grid {
@@ -10,9 +33,8 @@
 
     display: grid;
 
-    /* Corner sizes */
-    grid-template-columns: 110px 1fr 110px;
-    grid-template-rows: 80px 1fr 80px;
+    grid-template-columns: var(--hud-corner-w) 1fr var(--hud-corner-w);
+    grid-template-rows: var(--hud-corner-h) 1fr var(--hud-corner-h);
 
     width: 100%;
     height: 100%;
@@ -27,23 +49,22 @@
 
 .tl {
     background: url("/ui/HUD_Frames/corner_tl.svg") no-repeat top left;
-    background-size: 110px auto;
-    /* background-color: pink; */
+    background-size: var(--hud-corner-w) auto;
 }
 
 .tr {
     background: url("/ui/HUD_Frames/corner_tr.svg") no-repeat top right;
-    background-size: 110px auto;
+    background-size: var(--hud-corner-w) auto;
 }
 
 .bl {
     background: url("/ui/HUD_Frames/corner_bl.svg") no-repeat bottom left;
-    background-size: 110px auto;
+    background-size: var(--hud-corner-w) auto;
 }
 
 .br {
     background: url("/ui/HUD_Frames/corner_br.svg") no-repeat bottom right;
-    background-size: 110px auto;
+    background-size: var(--hud-corner-w) auto;
 }
 
 /* ---------- Top ---------- */
@@ -72,7 +93,6 @@
 .right {
     background: url("/ui/HUD_Frames/right.svg") repeat-y right center;
     background-size: 7px auto;
-    /* background-color: red */
 }
 
 /* ---------- Center ---------- */
@@ -84,12 +104,7 @@
 
 /* ---------- Content ---------- */
 
-/* .hud-content {
-    position: absolute;
-    inset: 80px 110px;
-    z-index: 10;
-} */
- .hud-content {
+.hud-content {
     position: absolute;
     inset: 0;
     z-index: 10;

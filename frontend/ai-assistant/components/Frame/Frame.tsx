@@ -1,21 +1,34 @@
 "use client";
 
-import { FRAME_OUTER_PADDING_CLASS } from "./frameAssets";
-// import HudFrame from "./HudFrame"; 
 import Hud from "./Hud";
+
 interface FrameProps {
   children: React.ReactNode;
+  width?: string | number;
+  height?: string | number;
+  className?: string;
 }
 
-export default function Frame({ children }: FrameProps) {
+export default function Frame({
+  children,
+  width,
+  height,
+  className,
+}: FrameProps) {
+  const hasExplicitSize = width != null || height != null;
+
   return (
     <div
-      className={`absolute inset-0 overflow-hidden ${FRAME_OUTER_PADDING_CLASS}`}
+      className={[
+        "relative overflow-hidden",
+        !hasExplicitSize && "w-full h-full",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={hasExplicitSize ? { width, height } : undefined}
     >
-      {/* Hud */}
-      <Hud>
-        {children}
-      </Hud>
+      <Hud>{children}</Hud>
     </div>
   );
 }

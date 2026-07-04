@@ -1,7 +1,5 @@
 "use client";
 
-import Frame from "@/components/Frame/Frame";
-
 interface BootScreenProps {
   onActivate: () => void;
 }
@@ -14,9 +12,9 @@ export default function BootScreen({
     <div>
 
       {/* Top Right */}
-      {/* <div className="absolute top-8 right-10 text-cyan-300">
+      <div className="absolute top-8 right-10 text-cyan-300">
         AI MARK I
-      </div> */}
+      </div>
 
       {/* Center */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
