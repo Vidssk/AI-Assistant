@@ -95,10 +95,7 @@ export default function Home() {
     <main className="relative h-screen w-screen overflow-hidden">
       {/* <ThreeBackground /> */}
       <Frame>
-        <HudItem top= "5%" left="85%" right="0%" color="cyan">
-          AI MARK I
-        </HudItem>
-      <HudItem top="50%" left="50%" backgroundColor="white">
+      <HudItem top="0%" left="0%" right="0%" bottom="0%">
       {!activated ? (
         <BootScreen onActivate={() => setActivated(true)} />
       ) : (
