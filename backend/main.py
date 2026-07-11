@@ -122,7 +122,7 @@ def main():
 
     def shutdown(signum=None, frame=None):
 
-        print("Stopping...")
+        # print("Stopping...")
 
         jarvis.active = False
 

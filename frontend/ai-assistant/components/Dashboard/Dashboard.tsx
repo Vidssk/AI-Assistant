@@ -11,7 +11,31 @@ type JarvisPayload = {
   status: string;
   agent: string | null;
   events?: JarvisEvent[];
+  system?: SystemInfo | null;
 };
+interface CpuInfo {
+    usage: number;
+    temperature: number;
+}
+
+interface GpuInfo {
+    name: string;
+    usage: number;
+    temperature: number;
+    vram_used: number;
+    vram_total: number;
+}
+
+interface MemoryInfo {
+    used: number;
+    total: number;
+}
+
+interface SystemInfo {
+    cpu: CpuInfo;
+    gpu: GpuInfo;
+    memory: MemoryInfo;
+}
 
 function parsePayload(data: unknown): JarvisPayload | null {
   if (!data || typeof data !== "object") return null;
@@ -33,6 +57,7 @@ export default function Dashboard() {
   const [status, setStatus] = useState("connecting...");
   const [agent, setAgent] = useState<string | null>(null);
   const [events, setEvents] = useState<JarvisEvent[]>([]);
+  const [system, setSystem] = useState<SystemInfo | null>(null);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
@@ -51,6 +76,7 @@ export default function Dashboard() {
         if (payload.status !== undefined) setStatus(payload.status);
         if (payload.agent !== undefined) setAgent(payload.agent);
         if (payload.events !== undefined) setEvents(payload.events);
+        if (payload.system !== undefined) setSystem(payload.system);
       } catch {
         console.error("Failed to parse WS message:", event.data);
       }
@@ -95,12 +121,22 @@ export default function Dashboard() {
                   {connected ? "connected" : "disconnected"}
                 </span>
               </p>
-              <p>
-                <span className="text-cyan-400/70">CPU:</span> —
-              </p>
-              <p>
-                <span className="text-cyan-400/70">GPU:</span> —
-              </p>
+              <div>
+                <h2>GPU: {system?.gpu?.name}</h2>
+                <p>- <span className="text-cyan-400/70">Usage: {system?.gpu?.usage}%</span></p>
+
+                <p>- <span className="text-cyan-400/70">Temperature: {system?.gpu?.temperature}°C</span></p>
+                <p>- <span className="text-cyan-400/70">VRAM: {system?.gpu?.vram_used}/{system?.gpu?.vram_total} GB</span></p>
+              </div>
+              <div>
+                <h1>CPU</h1>
+                <p>- <span className="text-cyan-400/70">Usage: {system?.cpu?.usage}%</span> </p>
+              </div>
+                <div>
+                <h2>Memory</h2>
+                <span className="text-cyan-400/70">Usage: {system?.memory?.used}/{system?.memory?.total} GB</span> —
+
+                </div>
             </div>
           </HudItem>
         </Frame>
@@ -152,10 +188,10 @@ export default function Dashboard() {
       <div className="col-span-3 min-h-0">
         <Frame>
           <HudItem top={12} left={12} right={12} bottom={12}>
-            <div className="h-full overflow-y-auto">
               <h2 className="text-cyan-300 text-sm font-semibold tracking-wide mb-3">
                 History Log
               </h2>
+            <div className="h-full overflow-y-auto">
               {events.length > 0 ? (
                 <ul className="space-y-1 font-mono text-xs text-cyan-200/80">
                   {events.map((entry, i) => (

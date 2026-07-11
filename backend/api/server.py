@@ -43,7 +43,6 @@ def create_app(state_manager, event_bus):
             clients.discard(websocket)
 
     async def broadcaster():
-        print("Broadcaster running")
 
         while True:
             try:

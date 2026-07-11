@@ -8,6 +8,7 @@ from services.speechToText import record_audio_vad
 from services.textToSpeech import speak, get_tts
 
 from tools.dispatcher import create_dispatcher
+from config.config import get_system_info
 
 print("Jarvis modules loaded.")
 
@@ -19,6 +20,8 @@ class Jarvis:
         self.chat_agent = ChatAgent(self.name)
         self.code_agent = CodeAgent(self.name)
         self.state_manager = state_manager
+        self.system = get_system_info()
+        self.state_manager.update(gpu=self.system["gpu"], cpu=self.system["cpu"], memory=self.system["memory"])
 
         # setup Input/Output Devices
         self.input_device = input_device
@@ -32,6 +35,7 @@ class Jarvis:
         self.speech_to_text_fn = speech_to_text_fn
         self.dispatcher = create_dispatcher(
             self.app_manager, self.chat_agent, self.code_agent)
+        print(f"--- {self.name} Initialized ---")
     
     def greet(self):
         return f"Hello, I am {self.name}, your personal assistant."
@@ -41,7 +45,7 @@ class Jarvis:
     def wake(self, Vmode=True):
         if not self.active:
             self.state_manager.update(status="active")
-            print("\n🔥 JARVIS WAKING UP\n")
+            print("AI ACTIVE\n")
 
             self.active = True
             self.run(voice_mode=Vmode)
@@ -84,7 +88,14 @@ class Jarvis:
 
             if handler:
                 try:
-                    self.state_manager.update(status="active", agent=intent, event=intent)
+                    self.system = get_system_info()
+                    self.state_manager.update(
+                        status="active", 
+                        agent=intent, 
+                        event=intent, 
+                        gpu=self.system["gpu"],
+                        cpu=self.system["cpu"],
+                        memory=self.system["memory"])
                     response = handler(args)
 
                     if response:
@@ -101,7 +112,8 @@ class Jarvis:
 
             else:
                 print(f"Unknown intent: {intent}")
-            self.state_manager.update(status="idle", agent=None, event=None)
+            self.system = get_system_info()
+            self.state_manager.update(status="idle", agent=None, event=None, gpu=self.system["gpu"], cpu=self.system["cpu"], memory=self.system["memory"])
             self.active = False
             print(f"{self.name} is idle.")
 

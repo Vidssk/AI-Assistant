@@ -21,7 +21,7 @@ export default function BootScreen({
 
         {/* Blender planet will be behind this */}
         <h1 className="text-6xl font-bold text-cyan-300 tracking-widest">
-          JARVIS
+          N.O.V.A
         </h1>
 
         <p className="mt-4 text-cyan-200">

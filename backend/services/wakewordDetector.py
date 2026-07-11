@@ -84,14 +84,14 @@ class WakeWordDetector:
 
         self.last_trigger = time.time()
 
-        print("\n🔥 WAKE WORD DETECTED\n")
+        print("\nWAKE WORD DETECTED\n")
 
         if self.on_detect:
             self.on_detect()
 
     def pause(self):
 
-        print("⏸ Wake detector paused")
+        # print("⏸ Wake detector paused")
         self.paused = True
 
     def resume(self):
@@ -105,8 +105,11 @@ class WakeWordDetector:
         self.active = False
     def start(self):
 
+        # print(
+        #     f"Listening for '{self.activation_phrase}'..."
+        # )
         print(
-            f"Listening for '{self.activation_phrase}'..."
+            f"Listening for wakeword."
         )
         with sd.InputStream(
             device=self.device,

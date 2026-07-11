@@ -25,14 +25,14 @@ def get_tts():
     global _tts
 
     if _tts is None:
-        print("Loading XTTS model...")
+        # print("Loading XTTS model...")
         # _tts = TTS(
         #     "tts_models/multilingual/multi-dataset/xtts_v2"
         # ).to("cuda") # fix to gpu later
         _tts = TTS(
         "tts_models/multilingual/multi-dataset/xtts_v2"
         ).to('cuda')
-        print("XTTS loaded.")
+        # print("XTTS loaded.")
 
     return _tts
 

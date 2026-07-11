@@ -11,7 +11,31 @@ class StateManager:
         self.clients = set()
         self.loop = None   # will store FastAPI loop
         self.event_bus = event_bus
-    def update(self, status=None, agent=_UNSET, event=None):
+        self.system = {
+            "cpu": {
+                "usage": 0.0,
+                "temperature": 0.0
+            },
+            "gpu": {
+                "name": None,
+                "usage":0.0,
+                "temperature": 0.0,
+                "vram_used": 0.0,
+                "vram_total": 0.0,
+            },
+            "memory": {
+                "used": 0.0,
+                "total":0.0
+            },
+        }
+    def update(
+            self, 
+            status=None, 
+            agent=_UNSET, 
+            event=None, 
+            cpu=None,
+            gpu=None,
+            memory=None):
         if status is not None:
             self.status = status
             update_state(status=status)
@@ -19,7 +43,12 @@ class StateManager:
         if agent is not _UNSET:
             self.agent = agent
             update_state(agent=agent)
-
+        if cpu is not None:
+            self.update_system(cpu=cpu)
+        if gpu is not None:
+            self.update_system(gpu=gpu)
+        if memory is not None:
+            self.update_system(memory=memory)
         if event:
             add_event(event)
 
@@ -71,8 +100,26 @@ class StateManager:
         return {
             "status": self.status,
             "agent": self.agent,
-            "events": get_events(20)
+            "events": get_events(20),
+            "system": self.system
         }
+    def update_system(self, cpu=None, gpu=None, memory=None):
+        if cpu is not None:
+            self.system["cpu"]["usage"] = cpu["usage"]
+            self.system["cpu"]["temperature"] = cpu["temperature"]
+
+        if gpu is not None:
+            self.system["gpu"]["name"] = gpu["name"]
+            self.system["gpu"]["usage"] = gpu["usage"]
+            self.system["gpu"]["temperature"] = gpu["temperature"]
+            self.system["gpu"]["vram_used"] = gpu["vram_used"]
+            self.system["gpu"]["vram_total"] = gpu["vram_total"]
+
+        if memory is not None:
+            self.system["memory"]["used"] = memory["used"]
+            self.system["memory"]["total"] = memory["total"]
+
+
 
 # class StateManager:
 #     def __init__(self):
