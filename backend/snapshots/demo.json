@@ -1,6 +1,6 @@
 {
   "meta": {
-    "exported_at": "2026-07-12T06:11:46.496258+00:00",
+    "exported_at": "2026-07-12T06:15:41.022341+00:00",
     "version": "1.0",
     "source": "offline"
   },
@@ -96,13 +96,13 @@
       },
       "gpu": {
         "name": "NVIDIA GeForce RTX 5070 Ti",
-        "usage": 22.0,
+        "usage": 6.0,
         "temperature": 47.0,
-        "vram_used": 2121.0,
+        "vram_used": 2133.0,
         "vram_total": 16303.0
       },
       "memory": {
-        "used": 14.17,
+        "used": 14.23,
         "total": 31.16
       }
     }
