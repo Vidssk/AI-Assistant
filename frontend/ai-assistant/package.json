@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync-snapshot": "node scripts/sync-snapshot.mjs",
+    "predev": "npm run sync-snapshot",
+    "prebuild": "npm run sync-snapshot",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
