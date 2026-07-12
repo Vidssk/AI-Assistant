@@ -1,5 +1,5 @@
 import { applyPayload, parsePayload } from "./jarvis-payload";
-import type { JarvisData, JarvisPayload } from "./jarvis-types";
+import type { JarvisData, JarvisPayload, JarvisSource } from "./jarvis-types";
 
 const WS_URL =
   process.env.NEXT_PUBLIC_JARVIS_WS_URL ?? "ws://127.0.0.1:8000/ws";
@@ -10,17 +10,21 @@ const RECONNECT_INTERVAL_MS = Number(
   process.env.NEXT_PUBLIC_JARVIS_RECONNECT_MS ?? 5000
 );
 
-type Mode = "connecting" | "live" | "snapshot";
-
 export type Unsubscribe = () => void;
 
-const initialData = (): JarvisData => ({
+export const initialData = (): JarvisData => ({
   status: "connecting...",
   agent: null,
   events: [],
   system: null,
   connected: false,
+  source: "connecting",
+  error: null,
 });
+
+function hasContent(data: JarvisData): boolean {
+  return data.events.length > 0 || data.system !== null || data.agent !== null;
+}
 
 function isSameData(a: JarvisData, b: JarvisData): boolean {
   return (
@@ -28,7 +32,9 @@ function isSameData(a: JarvisData, b: JarvisData): boolean {
     a.agent === b.agent &&
     a.connected === b.connected &&
     a.events === b.events &&
-    a.system === b.system
+    a.system === b.system &&
+    a.source === b.source &&
+    a.error === b.error
   );
 }
 
@@ -36,7 +42,7 @@ export function subscribeJarvisData(
   onChange: (data: JarvisData) => void
 ): Unsubscribe {
   let data = initialData();
-  let mode: Mode = "connecting";
+  let mode: JarvisSource = "connecting";
   let ws: WebSocket | null = null;
   let connectTimeout: ReturnType<typeof setTimeout> | null = null;
   let reconnectTimer: ReturnType<typeof setInterval> | null = null;
@@ -44,9 +50,14 @@ export function subscribeJarvisData(
   let connectGeneration = 0;
   let disposed = false;
 
-  const emit = (next: JarvisData) => {
-    if (isSameData(data, next)) return;
-    data = next;
+  const emit = (next: Partial<JarvisData>) => {
+    const merged: JarvisData = {
+      ...data,
+      ...next,
+      source: next.source ?? mode,
+    };
+    if (isSameData(data, merged)) return;
+    data = merged;
     onChange(data);
   };
 
@@ -85,18 +96,25 @@ export function subscribeJarvisData(
     }, RECONNECT_INTERVAL_MS);
   };
 
+  const reportSnapshotError = (message: string) => {
+    console.error(message);
+    if (!hasContent(data)) {
+      emit({ error: "Data feed unavailable — retrying..." });
+    }
+  };
+
   const loadSnapshot = async (abort: AbortController) => {
     try {
       const response = await fetch(SNAPSHOT_URL, { signal: abort.signal });
       if (!response.ok) {
-        console.error("Failed to load snapshot:", response.status);
+        reportSnapshotError(`Failed to load snapshot: ${response.status}`);
         return;
       }
 
       const json: unknown = await response.json();
       const payload = parsePayload(json);
       if (!payload) {
-        console.error("Failed to parse snapshot payload");
+        reportSnapshotError("Failed to parse snapshot payload");
         return;
       }
 
@@ -105,10 +123,11 @@ export function subscribeJarvisData(
       emit({
         ...applyPayload(payload, data),
         connected: false,
+        error: null,
       });
     } catch (error) {
       if (abort.signal.aborted) return;
-      console.error("Failed to fetch snapshot:", error);
+      reportSnapshotError(`Failed to fetch snapshot: ${error}`);
     }
   };
 
@@ -120,7 +139,7 @@ export function subscribeJarvisData(
     clearConnectTimeout();
     closeWebSocket();
 
-    emit({ ...data, connected: false });
+    emit({ connected: false });
 
     const abort = new AbortController();
     snapshotAbort = abort;
@@ -138,9 +157,9 @@ export function subscribeJarvisData(
     snapshotAbort = null;
 
     if (payload) {
-      emit({ ...applyPayload(payload, data), connected: true });
+      emit({ ...applyPayload(payload, data), connected: true, error: null });
     } else {
-      emit({ ...data, connected: true });
+      emit({ connected: true, error: null });
     }
   };
 
@@ -151,6 +170,8 @@ export function subscribeJarvisData(
     clearConnectTimeout();
     closeWebSocket();
     mode = "connecting";
+
+    emit({ source: "connecting", error: null });
 
     ws = new WebSocket(WS_URL);
 
@@ -172,7 +193,7 @@ export function subscribeJarvisData(
         const parsed: unknown = JSON.parse(event.data);
         const payload = parsePayload(parsed);
         if (!payload) return;
-        emit({ ...applyPayload(payload, data), connected: true });
+        emit({ ...applyPayload(payload, data), connected: true, error: null });
       } catch {
         console.error("Failed to parse WS message:", event.data);
       }

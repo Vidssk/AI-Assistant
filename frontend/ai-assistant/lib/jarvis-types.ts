@@ -31,10 +31,14 @@ export interface SystemInfo {
   memory: MemoryInfo;
 }
 
+export type JarvisSource = "connecting" | "live" | "snapshot";
+
 export type JarvisData = {
   status: string;
   agent: string | null;
   events: JarvisEvent[];
   system: SystemInfo | null;
   connected: boolean;
+  source: JarvisSource;
+  error: string | null;
 };

@@ -31,5 +31,7 @@ export function applyPayload(
     events: payload.events !== undefined ? payload.events : prev.events,
     system: payload.system !== undefined ? payload.system : prev.system,
     connected: prev.connected,
+    source: prev.source,
+    error: prev.error,
   };
 }
