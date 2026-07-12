@@ -30,6 +30,8 @@ export function applyPayload(
     agent: payload.agent !== undefined ? payload.agent : prev.agent,
     events: payload.events !== undefined ? payload.events : prev.events,
     system: payload.system !== undefined ? payload.system : prev.system,
+    response:
+      payload.response !== undefined ? payload.response : prev.response,
     connected: prev.connected,
     source: prev.source,
     error: prev.error,

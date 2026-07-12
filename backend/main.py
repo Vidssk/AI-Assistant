@@ -12,6 +12,8 @@ from db.state_db import init_db
 
 from db.events_db import init_events_db
 
+from db.responses_db import init_responses_db
+
 from managers.state_manager import StateManager
 
 import uvicorn
@@ -67,6 +69,8 @@ def main():
     init_db()
 
     init_events_db()
+
+    init_responses_db()
 
     event_bus = EventBus()
 

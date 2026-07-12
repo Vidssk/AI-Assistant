@@ -1,10 +1,17 @@
 export type JarvisEvent = { timestamp: string; event: string };
 
+export type JarvisResponse = {
+  timestamp: string;
+  agent: string | null;
+  response: string;
+};
+
 export type JarvisPayload = {
   status: string;
   agent: string | null;
   events?: JarvisEvent[];
   system?: SystemInfo | null;
+  response?: JarvisResponse | null;
 };
 
 export interface CpuInfo {
@@ -38,6 +45,7 @@ export type JarvisData = {
   agent: string | null;
   events: JarvisEvent[];
   system: SystemInfo | null;
+  response: JarvisResponse | null;
   connected: boolean;
   source: JarvisSource;
   error: string | null;

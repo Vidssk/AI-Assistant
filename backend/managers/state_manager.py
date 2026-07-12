@@ -1,5 +1,6 @@
 from db.state_db import update_state, get_state
 from db.events_db import add_event, get_events
+from db.responses_db import add_response, get_latest_response
 import asyncio
 
 _UNSET = object()
@@ -35,7 +36,8 @@ class StateManager:
             event=None, 
             cpu=None,
             gpu=None,
-            memory=None):
+            memory=None,
+            response=None):
         if status is not None:
             self.status = status
             update_state(status=status)
@@ -51,42 +53,12 @@ class StateManager:
             self.update_system(memory=memory)
         if event:
             add_event(event)
+        if response:
+            add_response(response, agent=self.agent)
 
         payload = self.get_payload()
         self.event_bus.emit(payload)
 
-        # # SAFE async bridge
-        # if self.loop:
-        #     self.loop.call_soon_threadsafe(
-        #         lambda: asyncio.create_task(self.broadcast())
-        #     )
-    # def update(self, status=None, agent=None, event=None):
-    # def update(self, status=None, agent=None, event=None):
-    #     if status is not None:
-    #         self.status = status
-    #         update_state(status=status)
-
-    #     if agent is not None:
-    #         self.agent = agent
-    #         update_state(agent=agent)
-
-    #     if event:
-    #         add_event(event)
-        
-    #     self.event_bus.emit(self.get_payload())
-        # if self.loop:
-        #     self.loop.call_soon_threadsafe(
-        #         lambda: asyncio.create_task(self.broadcast())
-        #     )
-
-    # async def broadcast(self):
-    #     payload = self.get_payload()
-
-    #     for client in list(self.clients):
-    #         try:
-    #             await client.send_json(payload)
-    #         except:
-    #             self.clients.remove(client)
     async def broadcast(self):
         payload = self.get_payload()
 
@@ -101,7 +73,8 @@ class StateManager:
             "status": self.status,
             "agent": self.agent,
             "events": get_events(20),
-            "system": self.system
+            "system": self.system,
+            "response": get_latest_response()
         }
     def update_system(self, cpu=None, gpu=None, memory=None):
         if cpu is not None:

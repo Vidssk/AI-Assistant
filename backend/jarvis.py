@@ -100,6 +100,7 @@ class Jarvis:
 
                     if response:
                         print(response)
+                        self.state_manager.update(response=response)
                         speak(
                             response,
                             f"voice_samples/{self.name.title()}/{self.name}.wav",

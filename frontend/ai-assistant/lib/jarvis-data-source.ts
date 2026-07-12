@@ -39,6 +39,7 @@ export const initialData = (): JarvisData => ({
   agent: null,
   events: [],
   system: null,
+  response: null,
   connected: false,
   source: "connecting",
   error: null,
@@ -66,6 +67,19 @@ function systemEqual(
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+function responseEqual(
+  a: JarvisData["response"],
+  b: JarvisData["response"]
+): boolean {
+  if (a === b) return true;
+  if (a === null || b === null) return a === b;
+  return (
+    a.timestamp === b.timestamp &&
+    a.agent === b.agent &&
+    a.response === b.response
+  );
+}
+
 function isSameData(a: JarvisData, b: JarvisData): boolean {
   return (
     a.status === b.status &&
@@ -73,6 +87,7 @@ function isSameData(a: JarvisData, b: JarvisData): boolean {
     a.connected === b.connected &&
     eventsEqual(a.events, b.events) &&
     systemEqual(a.system, b.system) &&
+    responseEqual(a.response, b.response) &&
     a.source === b.source &&
     a.error === b.error
   );
