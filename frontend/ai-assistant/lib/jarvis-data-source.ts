@@ -10,7 +10,29 @@ const RECONNECT_INTERVAL_MS = Number(
   process.env.NEXT_PUBLIC_JARVIS_RECONNECT_MS ?? 5000
 );
 
+const GLOBAL_KEY = "__jarvisDataSubscription__";
+
 export type Unsubscribe = () => void;
+
+type SharedSubscription = {
+  data: JarvisData;
+  listeners: Set<(data: JarvisData) => void>;
+  dispose: Unsubscribe;
+};
+
+function disposeStaleSubscription() {
+  const globalStore = globalThis as typeof globalThis & {
+    [GLOBAL_KEY]?: SharedSubscription;
+  };
+  globalStore[GLOBAL_KEY]?.dispose();
+  delete globalStore[GLOBAL_KEY];
+}
+
+// Tear down zombie intervals/sockets when this module hot-reloads in dev.
+disposeStaleSubscription();
+
+/** Changes on hot reload so hooks re-subscribe with a fresh connection. */
+export const SUBSCRIPTION_VERSION = Date.now();
 
 export const initialData = (): JarvisData => ({
   status: "connecting...",
@@ -56,9 +78,7 @@ function isSameData(a: JarvisData, b: JarvisData): boolean {
   );
 }
 
-export function subscribeJarvisData(
-  onChange: (data: JarvisData) => void
-): Unsubscribe {
+function createConnection(onChange: (data: JarvisData) => void): Unsubscribe {
   let data = initialData();
   let mode: JarvisSource = "connecting";
   let ws: WebSocket | null = null;
@@ -142,6 +162,7 @@ export function subscribeJarvisData(
       emit({
         ...applyPayload(payload, data),
         connected: false,
+        source: "snapshot",
         error: null,
       });
     } catch (error) {
@@ -153,6 +174,7 @@ export function subscribeJarvisData(
   const enterSnapshot = () => {
     if (disposed) return;
 
+    const fromLive = mode === "live";
     const alreadyInSnapshot = mode === "snapshot";
 
     snapshotAbort?.abort();
@@ -164,7 +186,7 @@ export function subscribeJarvisData(
       emit({ connected: false, source: "snapshot" });
     }
 
-    if (!hasContent(data)) {
+    if (!hasContent(data) || fromLive) {
       const abort = new AbortController();
       snapshotAbort = abort;
       void loadSnapshot(abort);
@@ -186,9 +208,14 @@ export function subscribeJarvisData(
     snapshotAbort = null;
 
     if (payload) {
-      emit({ ...applyPayload(payload, data), connected: true, error: null });
+      emit({
+        ...applyPayload(payload, data),
+        connected: true,
+        source: "live",
+        error: null,
+      });
     } else {
-      emit({ connected: true, error: null });
+      emit({ connected: true, source: "live", error: null });
     }
   };
 
@@ -238,7 +265,12 @@ export function subscribeJarvisData(
         const parsed: unknown = JSON.parse(event.data);
         const payload = parsePayload(parsed);
         if (!payload) return;
-        emit({ ...applyPayload(payload, data), connected: true, error: null });
+        emit({
+          ...applyPayload(payload, data),
+          connected: true,
+          source: "live",
+          error: null,
+        });
       } catch {
         console.error("Failed to parse WS message:", event.data);
       }
@@ -250,18 +282,17 @@ export function subscribeJarvisData(
         abandonSilentAttempt();
         return;
       }
-      if (mode !== "connecting") return;
       clearConnectTimeout();
-      enterSnapshot();
+      if (mode === "live" || mode === "connecting") {
+        enterSnapshot();
+      }
     };
 
     ws.onclose = () => {
       if (disposed || generation !== connectGeneration) return;
       clearConnectTimeout();
       if (silent) return;
-      if (mode === "live") {
-        enterSnapshot();
-      } else if (mode === "connecting") {
+      if (mode === "live" || mode === "connecting") {
         enterSnapshot();
       }
     };
@@ -277,5 +308,44 @@ export function subscribeJarvisData(
     snapshotAbort?.abort();
     snapshotAbort = null;
     closeWebSocket();
+  };
+}
+
+function getSharedSubscription(): SharedSubscription {
+  const listeners = new Set<(data: JarvisData) => void>();
+  let data = initialData();
+
+  const notify = (next: JarvisData) => {
+    data = next;
+    listeners.forEach((listener) => listener(data));
+  };
+
+  const dispose = createConnection(notify);
+  const shared: SharedSubscription = { data, listeners, dispose };
+
+  const globalStore = globalThis as typeof globalThis & {
+    [GLOBAL_KEY]?: SharedSubscription;
+  };
+  globalStore[GLOBAL_KEY] = shared;
+  return shared;
+}
+
+export function subscribeJarvisData(
+  onChange: (data: JarvisData) => void
+): Unsubscribe {
+  const globalStore = globalThis as typeof globalThis & {
+    [GLOBAL_KEY]?: SharedSubscription;
+  };
+
+  const shared = globalStore[GLOBAL_KEY] ?? getSharedSubscription();
+  shared.listeners.add(onChange);
+  onChange(shared.data);
+
+  return () => {
+    shared.listeners.delete(onChange);
+    if (shared.listeners.size === 0) {
+      shared.dispose();
+      delete globalStore[GLOBAL_KEY];
+    }
   };
 }
