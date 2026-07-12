@@ -48,6 +48,7 @@ pnpm-debug.log*
 !.yarn/releases
 !.yarn/versions
 frontend/ai-assistant/build
+frontend/ai-assistant/public/snapshot.json
 
 frontend/ai-assistant/.vercel
 frontend/ai-assistant/.DS_Store
