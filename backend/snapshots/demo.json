@@ -1,6 +1,6 @@
 {
   "meta": {
-    "exported_at": "2026-07-12T06:15:41.022341+00:00",
+    "exported_at": "2026-07-12T09:11:57.060897+00:00",
     "version": "1.0",
     "source": "offline"
   },
@@ -8,6 +8,38 @@
     "status": "idle",
     "agent": null,
     "events": [
+      {
+        "timestamp": "2026-07-12 09:01:08",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 09:00:48",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-07-12 08:43:14",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:21:40",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:20:52",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:00:11",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-12 07:59:22",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-12 07:06:21",
+        "event": "general_chat"
+      },
       {
         "timestamp": "2026-07-12 05:44:32",
         "event": "play_music"
@@ -55,65 +87,82 @@
       {
         "timestamp": "2026-07-06 03:25:59",
         "event": "general_chat"
-      },
-      {
-        "timestamp": "2026-07-06 03:11:51",
-        "event": "general_chat"
-      },
-      {
-        "timestamp": "2026-07-06 01:35:06",
-        "event": "close_app"
-      },
-      {
-        "timestamp": "2026-07-06 01:34:57",
-        "event": "open_app"
-      },
-      {
-        "timestamp": "2026-07-06 01:33:11",
-        "event": "general_chat"
-      },
-      {
-        "timestamp": "2026-07-06 01:32:16",
-        "event": "play_music"
-      },
-      {
-        "timestamp": "2026-07-06 01:31:48",
-        "event": "open_app"
-      },
-      {
-        "timestamp": "2026-07-06 01:31:27",
-        "event": "play_music"
-      },
-      {
-        "timestamp": "2026-07-06 01:29:54",
-        "event": "general_chat"
       }
     ],
     "system": {
       "cpu": {
-        "usage": 0.0,
+        "usage": 25.0,
         "temperature": null
       },
       "gpu": {
         "name": "NVIDIA GeForce RTX 5070 Ti",
-        "usage": 6.0,
-        "temperature": 47.0,
-        "vram_used": 2133.0,
+        "usage": 8.0,
+        "temperature": 53.0,
+        "vram_used": 2307.0,
         "vram_total": 16303.0
       },
       "memory": {
-        "used": 14.23,
+        "used": 14.01,
         "total": 31.16
       }
-    }
+    },
+    "response": {
+      "timestamp": "2026-07-12 09:01:11",
+      "agent": "general_chat",
+      "response": "Sir, the capital of Colombia is Bogot\u00e1."
+    },
+    "responses": [
+      {
+        "timestamp": "2026-07-12 09:01:11",
+        "agent": "general_chat",
+        "response": "Sir, the capital of Colombia is Bogot\u00e1."
+      },
+      {
+        "timestamp": "2026-07-12 09:00:48",
+        "agent": "search_web",
+        "response": "Opened search for capital of Colombia"
+      }
+    ]
   },
   "persisted": {
     "state": {
       "status": "idle",
       "agent": null,
-      "updated_at": "2026-07-12T05:44:36.088012"
+      "updated_at": "2026-07-12T09:01:16.663097"
     },
     "events": [
+      {
+        "timestamp": "2026-07-12 09:01:08",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 09:00:48",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-07-12 08:43:14",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:21:40",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:20:52",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 08:00:11",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-12 07:59:22",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-12 07:06:21",
+        "event": "general_chat"
+      },
       {
         "timestamp": "2026-07-12 05:44:32",
         "event": "play_music"

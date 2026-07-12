@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { JarvisResponse } from "@/lib/jarvis-types";
 import { useJarvisData } from "@/hooks/useJarvisData";
 import { fmtMetric, fmtPair, fmtText } from "@/lib/format";
 import Frame from "../Frame/Frame";
@@ -110,6 +111,28 @@ function SectionLabel({ children }: { children: ReactNode }) {
   );
 }
 
+function ReviewResponseRow({ item }: { item: JarvisResponse }) {
+  return (
+    <div className="rounded border border-cyan-500/25 bg-cyan-500/5 p-3 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
+      <div className="flex items-center justify-between gap-2 mb-2">
+        {item.agent ? (
+          <span className="text-[10px] px-2 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
+            {item.agent}
+          </span>
+        ) : (
+          <span />
+        )}
+        <span className="text-cyan-400/40 text-[10px] tabular-nums">
+          {item.timestamp}
+        </span>
+      </div>
+      <p className="text-cyan-200/90 text-xs whitespace-pre-wrap break-words line-clamp-3">
+        {item.response}
+      </p>
+    </div>
+  );
+}
+
 function StatusDot({ active = false }: { active?: boolean }) {
   return (
     <span
@@ -122,12 +145,19 @@ function StatusDot({ active = false }: { active?: boolean }) {
 }
 
 export default function Dashboard() {
-  const { status, agent, events, system, source, error, response } =
+  const { status, agent, events, system, source, error, response, responses } =
     useJarvisData();
   const isConnecting = source === "connecting";
   const showErrorBanner =
     error !== null && events.length === 0 && system === null && !isConnecting;
   const isActive = status.toLowerCase() === "active";
+  const isSnapshotDemo = source === "snapshot";
+  const reviewResponses =
+    isSnapshotDemo && responses.length > 0
+      ? responses.slice(0, 3)
+      : response
+        ? [response]
+        : [];
 
   const vramPercent = pct(system?.gpu?.vram_used, system?.gpu?.vram_total);
   const memoryPercent = pct(system?.memory?.used, system?.memory?.total);
@@ -257,27 +287,40 @@ export default function Dashboard() {
               <LoadingPlaceholder lines={2} />
             ) : (
               <div className="flex flex-col flex-1 min-h-0">
-                <div className="flex items-center justify-between gap-2 mb-2 shrink-0">
-                  <p className="text-cyan-400/50 text-[10px] uppercase tracking-widest">
-                    Output
-                  </p>
-                  {response?.agent && (
-                    <span className="text-[10px] px-2 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
-                      {response.agent}
-                    </span>
-                  )}
-                </div>
-                {response ? (
-                  <div className="flex-1 min-h-[10rem] rounded border border-cyan-500/20 bg-black/30 font-mono text-sm overflow-y-auto scrollbar-hidden p-4">
-                    <p className="text-cyan-400/40 text-[10px] tabular-nums mb-2">
-                      {response.timestamp}
-                    </p>
-                    <p className="text-cyan-200/90 whitespace-pre-wrap break-words">
-                      {response.response}
-                    </p>
-                  </div>
+                <p className="text-cyan-400/50 text-[10px] uppercase tracking-widest mb-2 shrink-0">
+                  Output
+                </p>
+                {reviewResponses.length > 0 ? (
+                  isSnapshotDemo ? (
+                    <div className="flex-1 min-h-[10rem] space-y-2 overflow-y-auto scrollbar-hidden">
+                      {reviewResponses.map((item, i) => (
+                        <ReviewResponseRow
+                          key={`${item.timestamp}-${item.agent ?? "none"}-${i}`}
+                          item={item}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex-1 min-h-[10rem] rounded border border-cyan-500/25 bg-cyan-500/5 font-mono text-sm overflow-y-auto scrollbar-hidden p-4 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        {reviewResponses[0].agent ? (
+                          <span className="text-[10px] px-2 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
+                            {reviewResponses[0].agent}
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        <span className="text-cyan-400/40 text-[10px] tabular-nums">
+                          {reviewResponses[0].timestamp}
+                        </span>
+                      </div>
+                      <p className="text-cyan-200/90 whitespace-pre-wrap break-words">
+                        {reviewResponses[0].response}
+                      </p>
+                    </div>
+                  )
                 ) : (
-                  <div className="flex-1 min-h-[10rem] rounded border border-dashed border-cyan-500/20 bg-black/30 font-mono text-sm flex items-center justify-center p-4">
+                  <div className="flex-1 min-h-[10rem] rounded border border-dashed border-cyan-500/20 bg-black/30 font-mono text-sm flex items-center justify-center p-4 transition-colors hover:border-cyan-500/30 hover:bg-cyan-500/[0.03]">
                     <div className="text-center">
                       <p className="text-cyan-200/80">
                         No results pending review

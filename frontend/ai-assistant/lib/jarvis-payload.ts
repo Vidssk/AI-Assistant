@@ -32,6 +32,8 @@ export function applyPayload(
     system: payload.system !== undefined ? payload.system : prev.system,
     response:
       payload.response !== undefined ? payload.response : prev.response,
+    responses:
+      payload.responses !== undefined ? payload.responses : prev.responses,
     connected: prev.connected,
     source: prev.source,
     error: prev.error,

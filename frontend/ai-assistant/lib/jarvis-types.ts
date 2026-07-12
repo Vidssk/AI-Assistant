@@ -12,6 +12,7 @@ export type JarvisPayload = {
   events?: JarvisEvent[];
   system?: SystemInfo | null;
   response?: JarvisResponse | null;
+  responses?: JarvisResponse[];
 };
 
 export interface CpuInfo {
@@ -46,6 +47,7 @@ export type JarvisData = {
   events: JarvisEvent[];
   system: SystemInfo | null;
   response: JarvisResponse | null;
+  responses: JarvisResponse[];
   connected: boolean;
   source: JarvisSource;
   error: string | null;

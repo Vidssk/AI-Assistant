@@ -1,6 +1,6 @@
 from db.state_db import update_state, get_state
 from db.events_db import add_event, get_events
-from db.responses_db import add_response, get_latest_response
+from db.responses_db import add_response, get_latest_response, get_responses
 import asyncio
 
 _UNSET = object()
@@ -74,7 +74,8 @@ class StateManager:
             "agent": self.agent,
             "events": get_events(20),
             "system": self.system,
-            "response": get_latest_response()
+            "response": get_latest_response(),
+            "responses": get_responses(3),
         }
     def update_system(self, cpu=None, gpu=None, memory=None):
         if cpu is not None:

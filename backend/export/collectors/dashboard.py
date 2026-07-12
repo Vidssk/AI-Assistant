@@ -4,10 +4,12 @@ import urllib.request
 
 from config.config import get_system_info
 from db.events_db import get_events
+from db.responses_db import get_latest_response, get_responses
 from db.state_db import get_state
 
 STATUS_URL = "http://127.0.0.1:8000/status"
 DASHBOARD_EVENT_LIMIT = 20
+DASHBOARD_RESPONSE_LIMIT = 3
 
 
 def build_dashboard_payload(status: str, agent, system: dict) -> dict:
@@ -16,6 +18,8 @@ def build_dashboard_payload(status: str, agent, system: dict) -> dict:
         "agent": agent,
         "events": get_events(DASHBOARD_EVENT_LIMIT),
         "system": system,
+        "response": get_latest_response(),
+        "responses": get_responses(DASHBOARD_RESPONSE_LIMIT),
     }
 
 
