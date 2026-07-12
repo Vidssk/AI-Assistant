@@ -163,7 +163,7 @@ export default function Dashboard() {
   const memoryPercent = pct(system?.memory?.used, system?.memory?.total);
 
   return (
-    <div className="relative w-full h-full min-h-0 p-4 overflow-y-auto grid grid-cols-1 auto-rows-[minmax(16rem,auto)] gap-4 lg:overflow-y-hidden lg:grid-cols-[1fr_1fr_2fr] lg:grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] lg:auto-rows-auto">
+    <div className="relative w-full h-full min-h-0 p-4 overflow-y-auto scrollbar-hidden grid grid-cols-1 auto-rows-[minmax(16rem,auto)] gap-4 lg:overflow-y-hidden lg:grid-cols-[1fr_1fr_2fr] lg:grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] lg:auto-rows-auto">
       {showErrorBanner && (
         <div className="absolute top-2 left-2 right-2 z-10 px-3 py-1.5 border border-amber-500/30 rounded bg-black/50 text-amber-400/90 text-xs font-mono tracking-wide">
           {error}
@@ -173,7 +173,7 @@ export default function Dashboard() {
       {/* Col 1 — AI Information */}
       <div className="min-h-0 min-w-0">
         <Frame className={FRAME_HOVER}>
-          <PanelContent title="AI Information">
+          <PanelContent title="AI Information" bodyClassName="scrollbar-hidden">
             <div className="flex items-center gap-2 pb-2 mb-3 border-b border-cyan-500/10">
               <span className="text-cyan-400/70 text-xs">Connection</span>
               <SourceBadge source={source} />
@@ -282,7 +282,7 @@ export default function Dashboard() {
       {/* Col 3 — Review */}
       <div className="min-h-0 min-w-0">
         <Frame>
-          <PanelContent title="Review" bodyClassName="flex flex-col">
+          <PanelContent title="Review" bodyClassName="flex flex-col scrollbar-hidden">
             {isConnecting ? (
               <LoadingPlaceholder lines={2} />
             ) : (
