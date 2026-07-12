@@ -1,99 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useJarvisData } from "@/hooks/useJarvisData";
 import Frame from "../Frame/Frame";
 import { HudItem } from "../Frame/HudItem";
 
 const AI_NAME = "AI-Mark I";
 
-type JarvisEvent = { timestamp: string; event: string };
-type JarvisPayload = {
-  status: string;
-  agent: string | null;
-  events?: JarvisEvent[];
-  system?: SystemInfo | null;
-};
-interface CpuInfo {
-    usage: number;
-    temperature: number;
-}
-
-interface GpuInfo {
-    name: string;
-    usage: number;
-    temperature: number;
-    vram_used: number;
-    vram_total: number;
-}
-
-interface MemoryInfo {
-    used: number;
-    total: number;
-}
-
-interface SystemInfo {
-    cpu: CpuInfo;
-    gpu: GpuInfo;
-    memory: MemoryInfo;
-}
-
-function parsePayload(data: unknown): JarvisPayload | null {
-  if (!data || typeof data !== "object") return null;
-
-  const obj = data as Record<string, unknown>;
-  if (obj.status !== undefined) return obj as JarvisPayload;
-
-  if (obj.type === "state" && obj.data && typeof obj.data === "object") {
-    return obj.data as JarvisPayload;
-  }
-  if (obj.type === "event" && obj.data && typeof obj.data === "object") {
-    return obj.data as JarvisPayload;
-  }
-
-  return null;
-}
-
 export default function Dashboard() {
-  const [status, setStatus] = useState("connecting...");
-  const [agent, setAgent] = useState<string | null>(null);
-  const [events, setEvents] = useState<JarvisEvent[]>([]);
-  const [system, setSystem] = useState<SystemInfo | null>(null);
-  const [connected, setConnected] = useState(false);
-
-  useEffect(() => {
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws");
-
-    ws.onopen = () => {
-      setConnected(true);
-    };
-
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        const payload = parsePayload(data);
-        if (!payload) return;
-
-        if (payload.status !== undefined) setStatus(payload.status);
-        if (payload.agent !== undefined) setAgent(payload.agent);
-        if (payload.events !== undefined) setEvents(payload.events);
-        if (payload.system !== undefined) setSystem(payload.system);
-      } catch {
-        console.error("Failed to parse WS message:", event.data);
-      }
-    };
-
-    ws.onerror = () => {
-      setConnected(false);
-    };
-
-    ws.onclose = () => {
-      setConnected(false);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
+  const { status, agent, events, system, connected } = useJarvisData();
 
   return (
     <div className="w-full h-full min-h-0 p-4 grid grid-cols-[1fr_1fr_2fr] grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] gap-4">
