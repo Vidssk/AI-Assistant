@@ -47,10 +47,10 @@ export default function Dashboard() {
             <h2 className="text-cyan-300 text-sm font-semibold tracking-wide mb-3">
               AI Information
             </h2>
-            <p className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-3">
               <span className="text-cyan-400/70 text-sm">Connection:</span>
               <SourceBadge source={source} />
-            </p>
+            </div>
             {isConnecting ? (
               <LoadingPlaceholder lines={4} />
             ) : (
