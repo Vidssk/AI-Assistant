@@ -1,0 +1,515 @@
+{
+  "meta": {
+    "exported_at": "2026-07-12T05:21:42.064233+00:00",
+    "version": "1.0",
+    "source": "live"
+  },
+  "dashboard": {
+    "status": "active",
+    "agent": "general_chat",
+    "events": [
+      {
+        "timestamp": "2026-07-12 05:19:47",
+        "event": "code_help"
+      },
+      {
+        "timestamp": "2026-07-12 05:18:58",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-12 05:18:58",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:14:30",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:14:16",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:13:45",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:28:29",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:28:14",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 03:27:30",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:25:59",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:11:51",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:35:06",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:34:57",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:33:11",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:32:16",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-06 01:31:48",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:31:27",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-06 01:29:54",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:27:33",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:27:13",
+        "event": "general_chat"
+      }
+    ],
+    "system": {
+      "cpu": {
+        "usage": 0.0,
+        "temperature": 0.0
+      },
+      "gpu": {
+        "name": null,
+        "usage": 0.0,
+        "temperature": 0.0,
+        "vram_used": 0.0,
+        "vram_total": 0.0
+      },
+      "memory": {
+        "used": 0.0,
+        "total": 0.0
+      }
+    }
+  },
+  "persisted": {
+    "state": {
+      "status": "active",
+      "agent": "general_chat",
+      "updated_at": "2026-07-12T05:19:47.308505"
+    },
+    "events": [
+      {
+        "timestamp": "2026-07-12 05:19:47",
+        "event": "code_help"
+      },
+      {
+        "timestamp": "2026-07-12 05:18:58",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-12 05:18:58",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:14:30",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:14:16",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 22:13:45",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:28:29",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:28:14",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 03:27:30",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:25:59",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 03:11:51",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:35:06",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:34:57",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:33:11",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:32:16",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-06 01:31:48",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-07-06 01:31:27",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-07-06 01:29:54",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:27:33",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:27:13",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 01:26:53",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-06 00:28:49",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-07-06 00:28:29",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-05 09:20:34",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-30 08:36:07",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-30 08:35:31",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-30 02:40:45",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-29 01:28:47",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-29 01:25:27",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-29 01:09:51",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-29 01:09:23",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-29 01:09:06",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-27 23:11:57",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-26 02:06:21",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-26 02:05:35",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 02:05:01",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 02:04:22",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 02:03:58",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 02:03:48",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 02:03:25",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 01:59:03",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-26 01:58:27",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 01:57:59",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-26 01:57:40",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 01:57:29",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 01:57:09",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-26 01:56:39",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 00:26:05",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-26 00:23:42",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 00:19:36",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 00:14:12",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-26 00:07:18",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-06-24 23:07:01",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:06:42",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:06:34",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:06:24",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:06:14",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:05:41",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-24 23:05:32",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:05:23",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:05:09",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:04:59",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:04:48",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-24 23:00:12",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 22:58:02",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 22:55:14",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 22:51:23",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 22:47:40",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 03:53:49",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 03:37:19",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-24 03:33:56",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-24 03:27:26",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-24 03:26:42",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-24 03:24:11",
+        "event": "code_help"
+      },
+      {
+        "timestamp": "2026-06-24 03:16:21",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-24 03:15:30",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-12 00:58:29",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-12 00:09:49",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-12 00:00:18",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-11 23:59:27",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-10 09:45:37",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 09:44:33",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 09:17:03",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-06-10 09:13:10",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 08:58:08",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-10 08:57:38",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 08:57:31",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-10 08:57:21",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-10 08:57:01",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 08:52:39",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-06-10 01:18:46",
+        "event": "search_web"
+      },
+      {
+        "timestamp": "2026-06-10 01:14:51",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-10 00:56:54",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-10 00:53:15",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-10 00:40:40",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-10 00:07:05",
+        "event": "play_music"
+      },
+      {
+        "timestamp": "2026-06-09 23:50:59",
+        "event": "close_app"
+      },
+      {
+        "timestamp": "2026-06-09 23:50:10",
+        "event": "open_app"
+      },
+      {
+        "timestamp": "2026-06-09 23:47:38",
+        "event": "play_music"
+      }
+    ]
+  }
+}

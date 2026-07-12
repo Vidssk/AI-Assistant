@@ -39,12 +39,19 @@ def get_events(limit=20):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
-    c.execute("""
-        SELECT timestamp, event
-        FROM events
-        ORDER BY id DESC
-        LIMIT ?
-    """, (limit,))
+    if limit is None:
+        c.execute("""
+            SELECT timestamp, event
+            FROM events
+            ORDER BY id DESC
+        """)
+    else:
+        c.execute("""
+            SELECT timestamp, event
+            FROM events
+            ORDER BY id DESC
+            LIMIT ?
+        """, (limit,))
 
     rows = c.fetchall()
 
