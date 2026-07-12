@@ -1,6 +1,6 @@
 {
   "meta": {
-    "exported_at": "2026-07-12T09:11:57.060897+00:00",
+    "exported_at": "2026-07-12T09:22:57.352477+00:00",
     "version": "1.0",
     "source": "offline"
   },
@@ -8,6 +8,14 @@
     "status": "idle",
     "agent": null,
     "events": [
+      {
+        "timestamp": "2026-07-12 09:21:11",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 09:18:30",
+        "event": "general_chat"
+      },
       {
         "timestamp": "2026-07-12 09:01:08",
         "event": "general_chat"
@@ -79,48 +87,45 @@
       {
         "timestamp": "2026-07-06 03:28:14",
         "event": "open_app"
-      },
-      {
-        "timestamp": "2026-07-06 03:27:30",
-        "event": "general_chat"
-      },
-      {
-        "timestamp": "2026-07-06 03:25:59",
-        "event": "general_chat"
       }
     ],
     "system": {
       "cpu": {
-        "usage": 25.0,
+        "usage": 17.6,
         "temperature": null
       },
       "gpu": {
         "name": "NVIDIA GeForce RTX 5070 Ti",
-        "usage": 8.0,
-        "temperature": 53.0,
-        "vram_used": 2307.0,
+        "usage": 6.0,
+        "temperature": 43.0,
+        "vram_used": 7178.0,
         "vram_total": 16303.0
       },
       "memory": {
-        "used": 14.01,
+        "used": 14.75,
         "total": 31.16
       }
     },
     "response": {
-      "timestamp": "2026-07-12 09:01:11",
+      "timestamp": "2026-07-12 09:21:13",
       "agent": "general_chat",
       "response": "Sir, the capital of Colombia is Bogot\u00e1."
     },
     "responses": [
       {
-        "timestamp": "2026-07-12 09:01:11",
+        "timestamp": "2026-07-12 09:21:13",
         "agent": "general_chat",
         "response": "Sir, the capital of Colombia is Bogot\u00e1."
       },
       {
-        "timestamp": "2026-07-12 09:00:48",
-        "agent": "search_web",
-        "response": "Opened search for capital of Colombia"
+        "timestamp": "2026-07-12 09:18:32",
+        "agent": "general_chat",
+        "response": "Colombia! A beautiful country with rich culture and history."
+      },
+      {
+        "timestamp": "2026-07-12 09:16:53",
+        "agent": "close_app",
+        "response": "Closed Chrome."
       }
     ]
   },
@@ -128,9 +133,17 @@
     "state": {
       "status": "idle",
       "agent": null,
-      "updated_at": "2026-07-12T09:01:16.663097"
+      "updated_at": "2026-07-12T09:21:19.108324"
     },
     "events": [
+      {
+        "timestamp": "2026-07-12 09:21:11",
+        "event": "general_chat"
+      },
+      {
+        "timestamp": "2026-07-12 09:18:30",
+        "event": "general_chat"
+      },
       {
         "timestamp": "2026-07-12 09:01:08",
         "event": "general_chat"

@@ -113,24 +113,28 @@ function SectionLabel({ children }: { children: ReactNode }) {
 
 function ReviewResponseRow({ item }: { item: JarvisResponse }) {
   return (
-    <div className="rounded border border-cyan-500/25 bg-cyan-500/5 p-3 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
-      <div className="flex items-center justify-between gap-2 mb-2">
+    <div className="rounded border border-cyan-500/25 bg-cyan-500/5 px-2.5 py-2 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
+      <div className="flex items-center justify-between gap-2 mb-1">
         {item.agent ? (
-          <span className="text-[10px] px-2 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
+          <span className="text-[10px] px-1.5 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
             {item.agent}
           </span>
         ) : (
           <span />
         )}
-        <span className="text-cyan-400/40 text-[10px] tabular-nums">
+        <span className="text-cyan-400/40 text-[10px] tabular-nums truncate">
           {item.timestamp}
         </span>
       </div>
-      <p className="text-cyan-200/90 text-xs whitespace-pre-wrap break-words line-clamp-3">
+      <p className="text-cyan-200/90 text-xs leading-snug whitespace-pre-wrap break-words line-clamp-2">
         {item.response}
       </p>
     </div>
   );
+}
+
+function sortRecentResponses(items: JarvisResponse[]): JarvisResponse[] {
+  return [...items].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 }
 
 function StatusDot({ active = false }: { active?: boolean }) {
@@ -151,13 +155,9 @@ export default function Dashboard() {
   const showErrorBanner =
     error !== null && events.length === 0 && system === null && !isConnecting;
   const isActive = status.toLowerCase() === "active";
-  const isSnapshotDemo = source === "snapshot";
-  const reviewResponses =
-    isSnapshotDemo && responses.length > 0
-      ? responses.slice(0, 3)
-      : response
-        ? [response]
-        : [];
+  const reviewResponses = sortRecentResponses(
+    responses.length > 0 ? responses : response ? [response] : []
+  ).slice(0, 3);
 
   const vramPercent = pct(system?.gpu?.vram_used, system?.gpu?.vram_total);
   const memoryPercent = pct(system?.memory?.used, system?.memory?.total);
@@ -288,49 +288,28 @@ export default function Dashboard() {
             ) : (
               <div className="flex flex-col flex-1 min-h-0">
                 <p className="text-cyan-400/50 text-[10px] uppercase tracking-widest mb-2 shrink-0">
-                  Output
+                  Recent
                 </p>
-                {reviewResponses.length > 0 ? (
-                  isSnapshotDemo ? (
-                    <div className="flex-1 min-h-[10rem] space-y-2 overflow-y-auto scrollbar-hidden">
-                      {reviewResponses.map((item, i) => (
-                        <ReviewResponseRow
-                          key={`${item.timestamp}-${item.agent ?? "none"}-${i}`}
-                          item={item}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex-1 min-h-[10rem] rounded border border-cyan-500/25 bg-cyan-500/5 font-mono text-sm overflow-y-auto scrollbar-hidden p-4 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        {reviewResponses[0].agent ? (
-                          <span className="text-[10px] px-2 py-0.5 border border-cyan-500/25 text-cyan-400/70 rounded uppercase tracking-wider">
-                            {reviewResponses[0].agent}
-                          </span>
-                        ) : (
-                          <span />
-                        )}
-                        <span className="text-cyan-400/40 text-[10px] tabular-nums">
-                          {reviewResponses[0].timestamp}
-                        </span>
-                      </div>
-                      <p className="text-cyan-200/90 whitespace-pre-wrap break-words">
-                        {reviewResponses[0].response}
-                      </p>
-                    </div>
-                  )
-                ) : (
-                  <div className="flex-1 min-h-[10rem] rounded border border-dashed border-cyan-500/20 bg-black/30 font-mono text-sm flex items-center justify-center p-4 transition-colors hover:border-cyan-500/30 hover:bg-cyan-500/[0.03]">
-                    <div className="text-center">
-                      <p className="text-cyan-200/80">
-                        No results pending review
-                      </p>
-                      <p className="text-cyan-400/40 text-xs mt-2">
-                        Approval workflow coming soon
-                      </p>
-                    </div>
+                {reviewResponses.length > 0 && (
+                  <div className="shrink-0 space-y-1.5 mb-2">
+                    {reviewResponses.map((item, i) => (
+                      <ReviewResponseRow
+                        key={`${item.timestamp}-${item.agent ?? "none"}-${i}`}
+                        item={item}
+                      />
+                    ))}
                   </div>
                 )}
+                <div className="flex-1 min-h-[8rem] rounded border border-dashed border-cyan-500/20 bg-black/30 font-mono text-sm flex items-center justify-center p-4 transition-colors hover:border-cyan-500/30 hover:bg-cyan-500/[0.03]">
+                  <div className="text-center">
+                    <p className="text-cyan-200/80">
+                      Select a result to review
+                    </p>
+                    <p className="text-cyan-400/40 text-xs mt-2">
+                      Full output will appear here
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </PanelContent>

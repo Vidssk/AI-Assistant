@@ -94,6 +94,11 @@ def get_responses(limit=20):
     ]
 
 
+def get_recent_responses(limit=3):
+    """Return the most recent responses, newest first."""
+    return get_responses(limit)
+
+
 def prune_responses(max_responses=1000):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
