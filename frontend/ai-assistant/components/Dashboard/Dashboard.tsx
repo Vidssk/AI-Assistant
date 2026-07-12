@@ -66,6 +66,8 @@ function PanelContent({
   );
 }
 
+const METRIC_BLOCK_W = "10.5rem";
+
 function MetricBar({
   label,
   value,
@@ -80,15 +82,15 @@ function MetricBar({
   const fill = percent ?? 0;
 
   return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="text-cyan-400/70">{label}</span>
-        <div className="flex items-center gap-2">
+    <div className="space-y-1 shrink-0" style={{ width: METRIC_BLOCK_W }}>
+      <div className="grid grid-cols-[auto_1fr] gap-x-2 items-center text-xs">
+        <span className="text-cyan-400/70 shrink-0">{label}</span>
+        <div className="flex items-center justify-end gap-2 min-w-0">
           {trailing}
-          <span className="text-cyan-300 tabular-nums">{value}</span>
+          <span className="text-cyan-300 tabular-nums truncate">{value}</span>
         </div>
       </div>
-      <div className="h-1.5 rounded-full bg-cyan-500/10 overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-cyan-500/10 overflow-hidden">
         <div
           className="h-full rounded-full bg-cyan-400/60 transition-all duration-500"
           style={{ width: percent == null ? "0%" : `${fill}%` }}
