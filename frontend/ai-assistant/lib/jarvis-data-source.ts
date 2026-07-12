@@ -26,13 +26,31 @@ function hasContent(data: JarvisData): boolean {
   return data.events.length > 0 || data.system !== null || data.agent !== null;
 }
 
+function eventsEqual(a: JarvisData["events"], b: JarvisData["events"]): boolean {
+  if (a === b) return true;
+  if (a.length !== b.length) return false;
+  return a.every(
+    (entry, i) =>
+      entry.timestamp === b[i].timestamp && entry.event === b[i].event
+  );
+}
+
+function systemEqual(
+  a: JarvisData["system"],
+  b: JarvisData["system"]
+): boolean {
+  if (a === b) return true;
+  if (a === null || b === null) return a === b;
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 function isSameData(a: JarvisData, b: JarvisData): boolean {
   return (
     a.status === b.status &&
     a.agent === b.agent &&
     a.connected === b.connected &&
-    a.events === b.events &&
-    a.system === b.system &&
+    eventsEqual(a.events, b.events) &&
+    systemEqual(a.system, b.system) &&
     a.source === b.source &&
     a.error === b.error
   );
@@ -48,6 +66,7 @@ export function subscribeJarvisData(
   let reconnectTimer: ReturnType<typeof setInterval> | null = null;
   let snapshotAbort: AbortController | null = null;
   let connectGeneration = 0;
+  let silentAttemptInFlight = false;
   let disposed = false;
 
   const emit = (next: Partial<JarvisData>) => {
@@ -90,8 +109,8 @@ export function subscribeJarvisData(
     if (disposed || mode !== "snapshot") return;
     clearReconnectInterval();
     reconnectTimer = setInterval(() => {
-      if (!disposed && mode === "snapshot") {
-        tryConnect();
+      if (!disposed && mode === "snapshot" && !silentAttemptInFlight) {
+        tryConnect({ silent: true });
       }
     }, RECONNECT_INTERVAL_MS);
   };
@@ -134,23 +153,33 @@ export function subscribeJarvisData(
   const enterSnapshot = () => {
     if (disposed) return;
 
+    const alreadyInSnapshot = mode === "snapshot";
+
     snapshotAbort?.abort();
     mode = "snapshot";
     clearConnectTimeout();
     closeWebSocket();
 
-    emit({ connected: false });
+    if (!alreadyInSnapshot) {
+      emit({ connected: false, source: "snapshot" });
+    }
 
-    const abort = new AbortController();
-    snapshotAbort = abort;
-    void loadSnapshot(abort);
-    scheduleReconnect();
+    if (!hasContent(data)) {
+      const abort = new AbortController();
+      snapshotAbort = abort;
+      void loadSnapshot(abort);
+    }
+
+    if (!alreadyInSnapshot) {
+      scheduleReconnect();
+    }
   };
 
   const enterLive = (payload?: JarvisPayload) => {
     if (disposed) return;
 
     mode = "live";
+    silentAttemptInFlight = false;
     clearConnectTimeout();
     clearReconnectInterval();
     snapshotAbort?.abort();
@@ -163,27 +192,43 @@ export function subscribeJarvisData(
     }
   };
 
-  const tryConnect = () => {
+  const tryConnect = (options?: { silent?: boolean }) => {
     if (disposed || mode === "live") return;
 
+    const silent = options?.silent ?? false;
     const generation = ++connectGeneration;
     clearConnectTimeout();
     closeWebSocket();
-    mode = "connecting";
 
-    emit({ source: "connecting", error: null });
+    if (silent) {
+      silentAttemptInFlight = true;
+    } else {
+      mode = "connecting";
+      emit({ source: "connecting", error: null });
+    }
 
     ws = new WebSocket(WS_URL);
 
+    const abandonSilentAttempt = () => {
+      if (disposed || generation !== connectGeneration) return;
+      clearConnectTimeout();
+      closeWebSocket();
+      silentAttemptInFlight = false;
+    };
+
     connectTimeout = setTimeout(() => {
-      if (disposed || generation !== connectGeneration || mode !== "connecting") {
+      if (disposed || generation !== connectGeneration) return;
+      if (silent) {
+        abandonSilentAttempt();
         return;
       }
+      if (mode !== "connecting") return;
       enterSnapshot();
     }, CONNECT_TIMEOUT_MS);
 
     ws.onopen = () => {
       if (disposed || generation !== connectGeneration) return;
+      silentAttemptInFlight = false;
       enterLive();
     };
 
@@ -200,9 +245,12 @@ export function subscribeJarvisData(
     };
 
     ws.onerror = () => {
-      if (disposed || generation !== connectGeneration || mode !== "connecting") {
+      if (disposed || generation !== connectGeneration) return;
+      if (silent) {
+        abandonSilentAttempt();
         return;
       }
+      if (mode !== "connecting") return;
       clearConnectTimeout();
       enterSnapshot();
     };
@@ -210,6 +258,7 @@ export function subscribeJarvisData(
     ws.onclose = () => {
       if (disposed || generation !== connectGeneration) return;
       clearConnectTimeout();
+      if (silent) return;
       if (mode === "live") {
         enterSnapshot();
       } else if (mode === "connecting") {
