@@ -8,6 +8,8 @@ import { HudItem } from "../Frame/HudItem";
 import SourceBadge from "./SourceBadge";
 
 const AI_NAME = "AI-Mark I";
+const FRAME_HOVER =
+  "transition-colors duration-200 hover:bg-cyan-500/[0.06]";
 
 function pct(used?: number | null, total?: number | null): number | null {
   if (used == null || total == null || total === 0) return null;
@@ -139,11 +141,12 @@ export default function Dashboard() {
 
       {/* Col 1 — AI Information */}
       <div className="min-h-0 min-w-0">
-        <Frame>
-          <PanelContent
-            title="AI Information"
-            headerRight={<SourceBadge source={source} />}
-          >
+        <Frame className={FRAME_HOVER}>
+          <PanelContent title="AI Information">
+            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-cyan-500/10">
+              <span className="text-cyan-400/70 text-xs">Connection</span>
+              <SourceBadge source={source} />
+            </div>
             {isConnecting ? (
               <LoadingPlaceholder lines={4} />
             ) : (
@@ -216,7 +219,7 @@ export default function Dashboard() {
             {isConnecting ? (
               <LoadingPlaceholder lines={2} />
             ) : agent ? (
-              <div className="rounded border border-cyan-500/25 bg-cyan-500/5 p-3 space-y-2">
+              <div className="rounded border border-cyan-500/25 bg-cyan-500/5 p-3 space-y-2 transition-colors hover:border-cyan-500/40 hover:bg-cyan-500/10">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
@@ -275,7 +278,7 @@ export default function Dashboard() {
       {/* Bottom — History Log */}
       <div className="min-h-0 lg:col-span-3">
         <Frame>
-          <PanelContent title="History Log">
+          <PanelContent title="History Log" bodyClassName="scrollbar-hidden">
             {isConnecting ? (
               <LoadingPlaceholder lines={5} />
             ) : events.length > 0 ? (
