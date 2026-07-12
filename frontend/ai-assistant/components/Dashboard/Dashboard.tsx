@@ -33,7 +33,7 @@ export default function Dashboard() {
     error !== null && events.length === 0 && system === null && !isConnecting;
 
   return (
-    <div className="relative w-full h-full min-h-0 p-4 grid grid-cols-[1fr_1fr_2fr] grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] gap-4">
+    <div className="relative w-full h-full min-h-0 p-4 overflow-y-auto grid grid-cols-1 auto-rows-[minmax(16rem,auto)] gap-4 lg:overflow-y-hidden lg:grid-cols-[1fr_1fr_2fr] lg:grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] lg:auto-rows-auto">
       <div className="absolute top-2 right-2 z-10">
         <SourceBadge source={source} />
       </div>
@@ -165,7 +165,7 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom — History Log */}
-      <div className="col-span-3 min-h-0">
+      <div className="min-h-0 lg:col-span-3">
         <Frame>
           <HudItem top={12} left={12} right={12} bottom={12}>
             <h2 className="text-cyan-300 text-sm font-semibold tracking-wide mb-3">
