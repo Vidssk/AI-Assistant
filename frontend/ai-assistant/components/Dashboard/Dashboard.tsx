@@ -4,7 +4,7 @@ import { useJarvisData } from "@/hooks/useJarvisData";
 import { fmtMetric, fmtPair, fmtText } from "@/lib/format";
 import Frame from "../Frame/Frame";
 import { HudItem } from "../Frame/HudItem";
-import SourceBadge, { connectionLabel } from "./SourceBadge";
+import SourceBadge from "./SourceBadge";
 
 const AI_NAME = "AI-Mark I";
 
@@ -28,18 +28,14 @@ function LoadingPlaceholder({ lines = 3 }: { lines?: number }) {
 export default function Dashboard() {
   const { status, agent, events, system, source, error } = useJarvisData();
   const isConnecting = source === "connecting";
-  const connection = connectionLabel(source);
   const showErrorBanner =
     error !== null && events.length === 0 && system === null && !isConnecting;
 
   return (
     <div className="relative w-full h-full min-h-0 p-4 overflow-y-auto grid grid-cols-1 auto-rows-[minmax(16rem,auto)] gap-4 lg:overflow-y-hidden lg:grid-cols-[1fr_1fr_2fr] lg:grid-rows-[minmax(0,1fr)_minmax(11rem,38%)] lg:auto-rows-auto">
-      <div className="absolute top-2 right-2 z-10">
-        <SourceBadge source={source} />
-      </div>
 
       {showErrorBanner && (
-        <div className="absolute top-2 left-2 right-36 z-10 px-3 py-1.5 border border-amber-500/30 rounded bg-black/50 text-amber-400/90 text-xs font-mono tracking-wide">
+        <div className="absolute top-2 left-2 right-2 z-10 px-3 py-1.5 border border-amber-500/30 rounded bg-black/50 text-amber-400/90 text-xs font-mono tracking-wide">
           {error}
         </div>
       )}
@@ -51,6 +47,10 @@ export default function Dashboard() {
             <h2 className="text-cyan-300 text-sm font-semibold tracking-wide mb-3">
               AI Information
             </h2>
+            <p className="flex items-center gap-2 mb-3">
+              <span className="text-cyan-400/70 text-sm">Connection:</span>
+              <SourceBadge source={source} />
+            </p>
             {isConnecting ? (
               <LoadingPlaceholder lines={4} />
             ) : (
@@ -62,10 +62,6 @@ export default function Dashboard() {
                 <p>
                   <span className="text-cyan-400/70">Status:</span>{" "}
                   <span className="text-cyan-300">{status}</span>
-                </p>
-                <p>
-                  <span className="text-cyan-400/70">Connection:</span>{" "}
-                  <span className={connection.className}>{connection.text}</span>
                 </p>
                 <div>
                   <p className="text-cyan-400/70 text-xs uppercase tracking-wide mb-1">
